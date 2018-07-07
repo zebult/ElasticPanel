@@ -2,7 +2,9 @@
 
 this app is create elastic panel.
 
-### elastic panel?
+![icon](https://user-images.githubusercontent.com/8577211/42413066-df5283e4-8253-11e8-958a-0908150ef29a.png)
+
+### what elastic panel?
 
 elastic panel is change panel size for scroll and key input.
 

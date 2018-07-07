@@ -71,8 +71,6 @@ class ViewController: NSViewController
         self.view.window?.styleMask                  = .fullSizeContentView;
 
         self.screenSize = NSScreen.main!.frame.size;
-
-        self.view.window?.level = .floating
     }
 
     override func keyDown(with event : NSEvent)

@@ -12,7 +12,9 @@ import Cocoa
 
 class ViewController: NSViewController
 {
-    private var deltaY: CGFloat = 10;
+    private var keyDeltaY: CGFloat = 10;
+
+    private var keyMouseDeltaY: CGFloat = 5;
 
     private let initHeight: CGFloat = 100;
 
@@ -59,7 +61,7 @@ class ViewController: NSViewController
         let title:String? = sender.cell?.title;
         UserDefaults.standard.setValue(title!, forKey: "delta_y");
 
-        self.deltaY = strToCGFloat(str: title!);
+        self.keyDeltaY = strToCGFloat(str: title!);
     }
 
     override func viewDidLoad()
@@ -69,13 +71,14 @@ class ViewController: NSViewController
         NSEvent.addLocalMonitorForEvents(matching:.keyDown) {
             (event)->NSEvent? in
             self.keyDown(with : event)
+            self.scrollWheel(with: event)
 
             return event
         }
 
         if UserDefaults.standard.object(forKey : "delta_y") == nil
         {
-            UserDefaults.standard.setValue(self.deltaY, forKey: "delta_y");
+            UserDefaults.standard.setValue(self.keyDeltaY, forKey: "delta_y");
         }
 
         if UserDefaults.standard.object(forKey: "hide_config") == nil
@@ -85,7 +88,7 @@ class ViewController: NSViewController
 
         let deltaY : String = UserDefaults.standard.string(forKey: "delta_y")!;
         self.yTextField.cell?.title = deltaY;
-        self.deltaY                   = strToCGFloat(str: deltaY);
+        self.keyDeltaY                = strToCGFloat(str: deltaY);
 
         resetWindow();
         updateConfig();
@@ -108,22 +111,13 @@ class ViewController: NSViewController
         let key       = String(describing: event.characters!);
         let direction = getKeyType(key: key);
 
-        resizeWindow(direction: direction);
-    }
-
-    func resizeWindow(direction : KeyType)
-    {
-        let frame = self.view.window!.frame;
-
         switch direction
         {
             case KeyType.down:
-
-                self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY - self.deltaY, width: frame.width, height: frame.height + self.deltaY), display: true)
-            case KeyType.up :
-
-                self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY + self.deltaY, width: frame.width, height: frame.height - self.deltaY), display: true)
-            case KeyType.reset :
+                resizeWindow(deltaY: -self.keyDeltaY);
+            case KeyType.up:
+                resizeWindow(deltaY: self.keyDeltaY);
+            case KeyType.reset:
 
                 resetWindow();
             case KeyType.config:
@@ -134,6 +128,17 @@ class ViewController: NSViewController
 
                 return;
         }
+    }
+
+    override func scrollWheel(with event : NSEvent)
+    {
+        resizeWindow(deltaY: event.deltaY * self.keyMouseDeltaY);
+    }
+
+    func resizeWindow(deltaY : CGFloat)
+    {
+        let frame = self.view.window!.frame;
+        self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY + deltaY, width: frame.width, height: frame.height - deltaY), display: true)
     }
 
     func resetWindow()

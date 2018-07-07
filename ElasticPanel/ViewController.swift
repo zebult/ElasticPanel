@@ -61,12 +61,16 @@ class ViewController: NSViewController
     override func viewWillAppear()
     {
         super.viewWillAppear();
-        self.view.window!.hasShadow = false;
+
+        self.view.window?.hasShadow                  = false;
+        self.view.window?.titlebarAppearsTransparent = true;
+        self.view.window?.titleVisibility            = .hidden;
+        self.view.window?.styleMask                  = .fullSizeContentView;
     }
 
     override func keyDown(with event : NSEvent)
     {
-        let key       = String(describing : event.characters!);
+        let key       = String(describing: event.characters!);
         let direction = getDirection(key: key);
 
         resizeWindow(direction: direction);

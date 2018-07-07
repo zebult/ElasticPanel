@@ -16,15 +16,16 @@ class ViewController: NSViewController
     {
         super.viewDidLoad()
 
-        /* Do any additional setup after loading the view. */
-    }
+        NSEvent.addLocalMonitorForEvents(matching:.keyDown) {
+            (event)->NSEvent? in
+            self.keyDown(with : event)
 
-    override var representedObject: Any?
-    {
-        didSet
-        {
-            /* Update the view, if already loaded. */
+            return event
         }
     }
-}
 
+    override func keyDown(with event : NSEvent)
+    {
+        print(String(describing: event.characters!))
+    }
+}

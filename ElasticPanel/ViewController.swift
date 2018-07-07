@@ -12,8 +12,6 @@ import Cocoa
 
 class ViewController: NSViewController
 {
-    private var deltaX: CGFloat = 10;
-
     private var deltaY: CGFloat = 10;
 
     private let initHeight: CGFloat = 100;
@@ -34,18 +32,12 @@ class ViewController: NSViewController
     func getKeyType(key: String)->KeyType
     {
         switch key {
-            case "h":
-
-                return KeyType.left;
             case "j":
 
                 return KeyType.down;
             case "k":
 
                 return KeyType.up;
-            case "l":
-
-                return KeyType.right;
             case "r":
 
                 return KeyType.reset;
@@ -58,25 +50,13 @@ class ViewController: NSViewController
         }
     }
 
-    @IBOutlet weak var xLabel: NSTextField!
-
     @IBOutlet weak var yLabel: NSTextField!
-
-    @IBOutlet weak var xTextField: NSTextField!
 
     @IBOutlet weak var yTextField: NSTextField!
 
-    @IBAction func onChangeX(_ sender : NSTextField)
-    {
-        let title:String? = sender.cell?.title;
-        UserDefaults.standard.setValue(title!, forKey: "delta_x");
-
-        self.deltaX = strToCGFloat(str: title!);
-    }
-
     @IBAction func onChangeY(_ sender : NSTextField)
     {
-        let title : String? = sender.cell?.title;
+        let title:String? = sender.cell?.title;
         UserDefaults.standard.setValue(title!, forKey: "delta_y");
 
         self.deltaY = strToCGFloat(str: title!);
@@ -93,12 +73,7 @@ class ViewController: NSViewController
             return event
         }
 
-        if UserDefaults.standard.object(forKey : "delta_x") == nil
-        {
-            UserDefaults.standard.setValue(self.deltaX, forKey: "delta_x");
-        }
-
-        if UserDefaults.standard.object(forKey: "delta_y") == nil
+        if UserDefaults.standard.object(forKey : "delta_y") == nil
         {
             UserDefaults.standard.setValue(self.deltaY, forKey: "delta_y");
         }
@@ -108,11 +83,8 @@ class ViewController: NSViewController
             UserDefaults.standard.setValue(false, forKey: "hide_config");
         }
 
-        let deltaX : String = UserDefaults.standard.string(forKey: "delta_x")!;
         let deltaY : String = UserDefaults.standard.string(forKey: "delta_y")!;
-        self.xTextField.cell?.title = deltaX;
         self.yTextField.cell?.title = deltaY;
-        self.deltaX                   = strToCGFloat(str: deltaX);
         self.deltaY                   = strToCGFloat(str: deltaY);
 
         updateConfig();
@@ -144,17 +116,12 @@ class ViewController: NSViewController
 
         switch direction
         {
-            case KeyType.left:
-                self.view.window?.setFrame(NSRect(x: frame.minX - self.deltaX, y: frame.minY, width: frame.width + self.deltaX, height: frame.height), display: true)
-            case KeyType.down :
+            case KeyType.down:
 
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY - self.deltaY, width: frame.width, height: frame.height + self.deltaY), display: true)
             case KeyType.up :
 
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height + self.deltaY), display: true)
-            case KeyType.right :
-
-                self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width + self.deltaX, height: frame.height), display: true)
             case KeyType.reset :
 
                 self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
@@ -171,9 +138,7 @@ class ViewController: NSViewController
     func updateConfig()
     {
         let hideConfig = UserDefaults.standard.bool(forKey:"hide_config");
-        self.xLabel.isHidden     = hideConfig;
         self.yLabel.isHidden     = hideConfig;
-        self.xTextField.isHidden = hideConfig;
         self.yTextField.isHidden = hideConfig;
     }
 

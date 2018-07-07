@@ -16,7 +16,7 @@ class ViewController: NSViewController
 
     private var keyMouseDeltaY: CGFloat = 5;
 
-    private let initHeight: CGFloat = 100;
+    private let initHeight: CGFloat = 50;
 
     private var screenSize: CGSize = CGSize(width: 0, height: 0);
 
@@ -57,13 +57,11 @@ class ViewController: NSViewController
 
             return event
         }
-
-        resetWindow();
     }
 
-    override func viewWillAppear()
+    override func viewDidAppear()
     {
-        super.viewWillAppear();
+        super.viewDidAppear();
 
         self.view.window?.hasShadow                  = false;
         self.view.window?.titlebarAppearsTransparent = true;
@@ -71,6 +69,8 @@ class ViewController: NSViewController
         self.view.window?.styleMask                  = .fullSizeContentView;
 
         self.screenSize = NSScreen.main!.frame.size;
+
+        resetWindow();
     }
 
     override func keyDown(with event : NSEvent)

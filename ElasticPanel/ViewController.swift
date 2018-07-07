@@ -122,7 +122,7 @@ class ViewController: NSViewController
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY - self.deltaY, width: frame.width, height: frame.height + self.deltaY), display: true)
             case KeyType.up :
 
-                self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height + self.deltaY), display: true)
+                self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY + self.deltaY, width: frame.width, height: frame.height - self.deltaY), display: true)
             case KeyType.reset :
 
                 resetWindow();

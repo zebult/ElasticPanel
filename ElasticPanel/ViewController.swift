@@ -12,7 +12,7 @@ import Cocoa
 
 class ViewController: NSViewController
 {
-    private var keyDeltaY: CGFloat = 10;
+    private var keyDeltaY: CGFloat = 15;
 
     private var keyMouseDeltaY: CGFloat = 5;
 
@@ -23,12 +23,9 @@ class ViewController: NSViewController
     enum KeyType
     {
         case none
-        case left
         case down
         case up
-        case right
         case reset
-        case config
     }
 
     func getKeyType(key: String)->KeyType
@@ -43,25 +40,10 @@ class ViewController: NSViewController
             case "r":
 
                 return KeyType.reset;
-            case "c":
-
-                return KeyType.config;
             default:
 
                 return KeyType.none;
         }
-    }
-
-    @IBOutlet weak var yLabel: NSTextField!
-
-    @IBOutlet weak var yTextField: NSTextField!
-
-    @IBAction func onChangeY(_ sender : NSTextField)
-    {
-        let title:String? = sender.cell?.title;
-        UserDefaults.standard.setValue(title!, forKey: "delta_y");
-
-        self.keyDeltaY = strToCGFloat(str: title!);
     }
 
     override func viewDidLoad()
@@ -76,22 +58,7 @@ class ViewController: NSViewController
             return event
         }
 
-        if UserDefaults.standard.object(forKey : "delta_y") == nil
-        {
-            UserDefaults.standard.setValue(self.keyDeltaY, forKey: "delta_y");
-        }
-
-        if UserDefaults.standard.object(forKey: "hide_config") == nil
-        {
-            UserDefaults.standard.setValue(false, forKey: "hide_config");
-        }
-
-        let deltaY : String = UserDefaults.standard.string(forKey: "delta_y")!;
-        self.yTextField.cell?.title = deltaY;
-        self.keyDeltaY                = strToCGFloat(str: deltaY);
-
         resetWindow();
-        updateConfig();
     }
 
     override func viewWillAppear()
@@ -122,10 +89,6 @@ class ViewController: NSViewController
             case KeyType.reset:
 
                 resetWindow();
-            case KeyType.config:
-                let hideConfig = UserDefaults.standard.bool(forKey:"hide_config");
-                UserDefaults.standard.setValue(!hideConfig, forKey: "hide_config");
-                updateConfig();
             default:
 
                 return;
@@ -146,22 +109,5 @@ class ViewController: NSViewController
     func resetWindow()
     {
         self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
-    }
-
-    func updateConfig()
-    {
-        let hideConfig = UserDefaults.standard.bool(forKey:"hide_config");
-        self.yLabel.isHidden     = hideConfig;
-        self.yTextField.isHidden = hideConfig;
-    }
-
-    func strToCGFloat(str : String)->CGFloat
-    {
-        if let number = NumberFormatter().number(from: str)
-        {
-            return CGFloat(truncating: number);
-        }
-
-        return 0;
     }
 }

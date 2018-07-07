@@ -58,6 +58,12 @@ class ViewController: NSViewController
         }
     }
 
+    override func viewWillAppear()
+    {
+        super.viewWillAppear();
+        self.view.window!.hasShadow = false;
+    }
+
     override func keyDown(with event : NSEvent)
     {
         let key       = String(describing : event.characters!);

@@ -16,33 +16,41 @@ class ViewController: NSViewController
 
     private let distanceY: CGFloat = 10;
 
-    enum Direction
+    private let initHeight: CGFloat = 100;
+
+    private var screenSize: CGSize = CGSize(width: 0, height: 0);
+
+    enum KeyType
     {
         case none
         case left
         case down
         case up
         case right
+        case reset
     }
 
-    func getDirection(key: String)->Direction
+    func getKeyType(key: String)->KeyType
     {
         switch key {
             case "h":
 
-                return Direction.left;
+                return KeyType.left;
             case "j":
 
-                return Direction.down;
+                return KeyType.down;
             case "k":
 
-                return Direction.up;
+                return KeyType.up;
             case "l":
 
-                return Direction.right;
+                return KeyType.right;
+            case "r":
+
+                return KeyType.reset;
             default:
 
-                return Direction.none;
+                return KeyType.none;
         }
     }
 
@@ -66,33 +74,38 @@ class ViewController: NSViewController
         self.view.window?.titlebarAppearsTransparent = true;
         self.view.window?.titleVisibility            = .hidden;
         self.view.window?.styleMask                  = .fullSizeContentView;
+
+        self.screenSize = NSScreen.main!.frame.size;
     }
 
     override func keyDown(with event : NSEvent)
     {
         let key       = String(describing: event.characters!);
-        let direction = getDirection(key: key);
+        let direction = getKeyType(key: key);
 
         resizeWindow(direction: direction);
     }
 
-    func resizeWindow(direction : Direction)
+    func resizeWindow(direction : KeyType)
     {
         let frame = self.view.window!.frame;
 
         switch direction
         {
-            case Direction.left:
+            case KeyType.left:
                 self.view.window?.setFrame(NSRect(x: frame.minX - self.distanceX, y: frame.minY, width: frame.width + self.distanceX, height: frame.height), display: true)
-            case Direction.down :
+            case KeyType.down :
 
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY - self.distanceY, width: frame.width, height: frame.height + self.distanceY), display: true)
-            case Direction.up :
+            case KeyType.up :
 
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height + self.distanceY), display: true)
-            case Direction.right :
+            case KeyType.right :
 
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width + self.distanceX, height: frame.height), display: true)
+            case KeyType.reset :
+
+                self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
             default :
 
                 return;

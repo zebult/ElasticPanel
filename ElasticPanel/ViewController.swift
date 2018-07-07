@@ -87,6 +87,7 @@ class ViewController: NSViewController
         self.yTextField.cell?.title = deltaY;
         self.deltaY                   = strToCGFloat(str: deltaY);
 
+        resetWindow();
         updateConfig();
     }
 
@@ -124,15 +125,20 @@ class ViewController: NSViewController
                 self.view.window?.setFrame(NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height + self.deltaY), display: true)
             case KeyType.reset :
 
-                self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
-            case KeyType.config :
-                let hideConfig = UserDefaults.standard.bool(forKey: "hide_config");
+                resetWindow();
+            case KeyType.config:
+                let hideConfig = UserDefaults.standard.bool(forKey:"hide_config");
                 UserDefaults.standard.setValue(!hideConfig, forKey: "hide_config");
                 updateConfig();
             default:
 
                 return;
         }
+    }
+
+    func resetWindow()
+    {
+        self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
     }
 
     func updateConfig()

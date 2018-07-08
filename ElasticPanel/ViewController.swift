@@ -67,6 +67,7 @@ class ViewController: NSViewController
         self.view.window?.titlebarAppearsTransparent = true;
         self.view.window?.titleVisibility            = .hidden;
         self.view.window?.styleMask                  = .fullSizeContentView;
+        self.view.window?.level                      = .floating;
 
         self.screenSize = NSScreen.main!.frame.size;
 

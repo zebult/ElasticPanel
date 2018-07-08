@@ -16,7 +16,9 @@ class ViewController: NSViewController
 
     private var keyMouseDeltaY: CGFloat = 5;
 
-    private let initHeight: CGFloat = 50;
+    private let initHeight: CGFloat = 0;
+
+    private let resetHeight: CGFloat = 85;
 
     private var screenSize: CGSize = CGSize(width: 0, height: 0);
 
@@ -114,5 +116,24 @@ class ViewController: NSViewController
     func resetWindow()
     {
         self.view.window?.setFrame(NSRect(x: 0, y: self.screenSize.height - self.initHeight, width: self.screenSize.width, height: self.initHeight), display: true)
+
+        Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) {
+            (timer) in
+            if self.isResetFinish()
+            {
+                timer.invalidate();
+
+                return;
+            }
+
+            self.resizeWindow(deltaY: -1);
+        }
+    }
+
+    func isResetFinish()->Bool
+    {
+        let windowHeight = self.view.window?.frame.height;
+
+        return windowHeight! > self.resetHeight;
     }
 }

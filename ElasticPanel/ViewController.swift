@@ -53,6 +53,7 @@ class ViewController: NSViewController
         NSEvent.addLocalMonitorForEvents(matching:.keyDown) {
             (event)->NSEvent? in
             self.keyDown(with : event)
+            self.mouseDown(with: event)
             self.scrollWheel(with: event)
 
             return event
@@ -92,6 +93,11 @@ class ViewController: NSViewController
 
                 return;
         }
+    }
+
+    override func mouseDown(with event : NSEvent)
+    {
+        resetWindow();
     }
 
     override func scrollWheel(with event : NSEvent)
